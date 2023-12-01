@@ -1,6 +1,6 @@
 {
   "name": "distify",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Make your experience better with spotify links.",
   "engines": {
     "node": ">=18.0.0",
