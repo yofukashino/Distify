@@ -1,11 +1,19 @@
-# Replugged plugin template
+### Distify
 
-See the [plugin development guide](https://guide.replugged.dev/docs/plugins/getting-started) for
-more information on using this template.
+Make your experience better with spotify links.
 
-# License
+Like Playing directly or adding in queue. (Also opening directly in app)
 
-The [plugin template](https://github.com/replugged-org/plugin-template) is licensed under the
-[MIT](https://opensource.org/license/mit/) license. However, addons using this template are not
-necessarily licensed under MIT. Developers are encouraged to add a license file to their repository,
-but if none exists, the repository should be considered as unlicensed.
+Direct Download Link: [dev.tharki.Distify.asar](https://github.com/TharkiDev/Distify/releases/latest/download/dev.tharki.Distify.asar)
+
+Install Link:
+
+
+[![Install in Replugged](https://img.shields.io/badge/-Install%20in%20Replugged-blue?style=for-the-badge&logo=none)](https://replugged.dev/install?identifier=TharkiDev/Distify&source=github)
+
+![image](https://i.imgur.com/i7r0j9L.png)
+
+
+
+> For Contributing: [Make a pr thats all.]
+

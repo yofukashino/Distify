@@ -1,7 +1,7 @@
 {
-  "name": "plugin-template",
+  "name": "distify",
   "version": "1.0.0",
-  "description": "A plugin template",
+  "description": "Make your experience better with spotify links.",
   "engines": {
     "node": ">=18.0.0",
     "pnpm": ">=8.0.0"
@@ -23,15 +23,18 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^20.6.1",
+    "@types/node": "^18.16.5",
+    "@types/react": "^18.2.6",
     "@typescript-eslint/eslint-plugin": "^6.7.0",
     "@typescript-eslint/parser": "^6.7.0",
-    "eslint": "^8.49.0",
+    "discord-types": "^1.3.3",
+    "eslint": "^8.40.0",
     "eslint-config-dmitmel": "github:dmitmel/eslint-config-dmitmel",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-react": "^7.33.2",
-    "prettier": "^3.0.3",
-    "replugged": "^4.6.2",
-    "typescript": "^5.2.2"
+    "eslint-plugin-react": "^7.32.2",
+    "prettier": "^2.8.8",
+    "replugged": "^4.7.4",
+    "type-fest": "^3.10.0",
+    "typescript": "^5.0.4"
   }
 }

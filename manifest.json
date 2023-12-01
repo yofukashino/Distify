@@ -1,20 +1,22 @@
 {
-  "id": "dev.replugged.PluginTemplate",
-  "name": "Plugin Template",
-  "description": "A plugin template",
-  "author": {
-    "name": "replugged",
-    "discordID": "1000992611840049192",
-    "github": "replugged-org"
-  },
+  "id": "dev.tharki.Distify",
+  "name": "Distify",
+  "description": "Make your experience better with spotify links.",
+  "author": [
+    {
+      "name": "Ahlawat",
+      "discordID": "1025214794766221384",
+      "github": "TharkiDev"
+    }
+  ],
   "version": "1.0.0",
   "updater": {
-    "type": "github",
-    "id": "replugged-org/plugin-template"
+    "type": "store",
+    "id": "dev.tharki.Distify"
   },
   "license": "MIT",
   "type": "replugged-plugin",
   "renderer": "src/index.ts",
-  "source": "https://github.com/replugged-org/plugin-template",
-  "image": ["https://i.imgur.com/14CNs3a.png?CHANGE-THIS-URL"]
+  "source": "https://github.com/TharkiDev/Distify",
+  "image": "https://i.imgur.com/i7r0j9L.png"
 }
