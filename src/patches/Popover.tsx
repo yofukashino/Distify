@@ -41,8 +41,9 @@ export default (): void => {
           }
         }
       },
-      onContextMenu: async (e) => {
-        await Utils.openContextMenu(e, SpotifyLinks, SpotifyAccounts, { play: true, queue: false });
+      onContextMenu: (e) => {
+        if (SpotifyAccounts.length > 1)
+          Utils.openContextMenu(e, SpotifyLinks, SpotifyAccounts, { play: true, queue: false });
       },
     };
   });
@@ -80,8 +81,9 @@ export default (): void => {
           }
         }
       },
-      onContextMenu: async (e) => {
-        await Utils.openContextMenu(e, SpotifyLinks, SpotifyAccounts, { play: false, queue: true });
+      onContextMenu: (e) => {
+        if (SpotifyAccounts.length > 1)
+          Utils.openContextMenu(e, SpotifyLinks, SpotifyAccounts, { play: false, queue: true });
       },
     };
   });

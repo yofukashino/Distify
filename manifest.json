@@ -2,13 +2,11 @@
   "id": "dev.tharki.Distify",
   "name": "Distify",
   "description": "Make your experience better with spotify links.",
-  "author": [
-    {
-      "name": "Ahlawat",
-      "discordID": "1121961711080050780",
-      "github": "TharkiDev"
-    }
-  ],
+  "author": {
+    "name": "Ahlawat",
+    "discordID": "1121961711080050780",
+    "github": "YofukashiNo"
+  },
   "version": "1.0.2",
   "updater": {
     "type": "store",
@@ -17,6 +15,6 @@
   "license": "MIT",
   "type": "replugged-plugin",
   "renderer": "src/index.ts",
-  "source": "https://github.com/TharkiDev/Distify",
+  "source": "https://github.com/YofukashiNo/Distify",
   "image": "https://i.imgur.com/i7r0j9L.png"
 }
