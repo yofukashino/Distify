@@ -44,7 +44,7 @@ export const error = async (res): Promise<Error> => {
   switch (res.status) {
     case 401:
     case 403:
-      return new Error("Unauthorized. Relinking Account May Help");
+      return new Error("Unauthorized. Relinking Account or Updating Player May Help");
     case 404:
       return new Error("It's recommended To Open Spotify");
     case 429:
