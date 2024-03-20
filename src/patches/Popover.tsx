@@ -26,10 +26,10 @@ export default (): void => {
           });
         } else {
           try {
-            const [, type, id] = SpotifyLinks.pop();
-            await Utils.play(type, id, SpotifyAccounts[0].accessToken);
-            for (const [, type, id] of SpotifyLinks)
-              await Utils.queue(type, id, SpotifyAccounts[0].accessToken);
+            const [play, ...queue] = SpotifyLinks;
+            const [, type, id] = play;
+            await Utils.play(type, id);
+            for (const [, type, id] of queue ?? []) await Utils.queue(type, id);
             ToastUtils.toast("Successfully Played on Spotify", ToastUtils.Kind.SUCCESS, {
               duration: 5000,
             });
@@ -42,8 +42,7 @@ export default (): void => {
         }
       },
       onContextMenu: (e) => {
-        if (SpotifyAccounts.length > 1)
-          Utils.openContextMenu(e, SpotifyLinks, SpotifyAccounts, { play: true, queue: false });
+        Utils.openContextMenu(e, SpotifyLinks, SpotifyAccounts, { play: true, queue: false });
       },
     };
   });
@@ -68,8 +67,7 @@ export default (): void => {
           });
         } else {
           try {
-            for (const [, type, id] of SpotifyLinks)
-              await Utils.queue(type, id, SpotifyAccounts[0].accessToken);
+            for (const [, type, id] of SpotifyLinks) await Utils.queue(type, id);
             ToastUtils.toast("Successfully Queued on Spotify", ToastUtils.Kind.SUCCESS, {
               duration: 5000,
             });
@@ -82,8 +80,7 @@ export default (): void => {
         }
       },
       onContextMenu: (e) => {
-        if (SpotifyAccounts.length > 1)
-          Utils.openContextMenu(e, SpotifyLinks, SpotifyAccounts, { play: false, queue: true });
+        Utils.openContextMenu(e, SpotifyLinks, SpotifyAccounts, { play: false, queue: true });
       },
     };
   });

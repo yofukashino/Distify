@@ -1,16 +1,16 @@
 {
-  "id": "dev.tharki.Distify",
+  "id": "dev.yofukashino.Distify",
   "name": "Distify",
   "description": "Make your experience better with spotify links.",
   "author": {
-    "name": "Ahlawat",
+    "name": "Nanakusa",
     "discordID": "1121961711080050780",
     "github": "YofukashiNo"
   },
   "version": "1.0.3",
   "updater": {
     "type": "store",
-    "id": "dev.tharki.Distify"
+    "id": "dev.yofukashino.Distify"
   },
   "license": "MIT",
   "type": "replugged-plugin",

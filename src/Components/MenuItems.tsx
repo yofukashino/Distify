@@ -3,7 +3,6 @@ import { ContextMenu } from "replugged/components";
 import { PluginLogger } from "../index";
 import Utils from "../lib/utils";
 import Icons from "./Icons";
-import Types from "../types";
 
 export const noAccounts = (): React.ReactElement => {
   return (
@@ -17,10 +16,7 @@ export const noAccounts = (): React.ReactElement => {
   );
 };
 
-export const addToQueue = (
-  SpotifyLinks: string[][],
-  SpotifyAccount: Types.SpotifyAccounts,
-): React.ReactElement => {
+export const addToQueue = (SpotifyLinks: string[][]): React.ReactElement => {
   if (SpotifyLinks.length === 1) {
     const [, type, id, name] = SpotifyLinks[0];
     return (
@@ -32,7 +28,7 @@ export const addToQueue = (
         icon={() => <Icons.queue width="16" height="16" />}
         action={async () => {
           try {
-            await Utils.queue(type, id, SpotifyAccount.accessToken);
+            await Utils.queue(type, id);
             ToastUtils.toast("Successfully Queued on Spotify", ToastUtils.Kind.SUCCESS, {
               duration: 5000,
             });
@@ -54,8 +50,7 @@ export const addToQueue = (
       icon={() => <Icons.queue width="16" height="16" />}
       action={async () => {
         try {
-          for (const [, type, id] of SpotifyLinks)
-            await Utils.queue(type, id, SpotifyAccount.accessToken);
+          for (const [, type, id] of SpotifyLinks) await Utils.queue(type, id);
           ToastUtils.toast("Successfully Queued on Spotify", ToastUtils.Kind.SUCCESS, {
             duration: 5000,
           });
@@ -75,7 +70,7 @@ export const addToQueue = (
             icon={() => <Icons.queue width="16" height="16" />}
             action={async () => {
               try {
-                await Utils.queue(type, id, SpotifyAccount.accessToken);
+                await Utils.queue(type, id);
                 ToastUtils.toast("Successfully Queued on Spotify", ToastUtils.Kind.SUCCESS, {
                   duration: 5000,
                 });
@@ -93,10 +88,7 @@ export const addToQueue = (
   );
 };
 
-export const play = (
-  SpotifyLinks: string[][],
-  SpotifyAccount: Types.SpotifyAccounts,
-): React.ReactElement => {
+export const play = (SpotifyLinks: string[][]): React.ReactElement => {
   if (SpotifyLinks.length === 1) {
     const [, type, id, name] = SpotifyLinks[0];
     return (
@@ -108,7 +100,7 @@ export const play = (
         icon={() => <Icons.play width="16" height="16" />}
         action={async () => {
           try {
-            await Utils.play(type, id, SpotifyAccount.accessToken);
+            await Utils.play(type, id);
             ToastUtils.toast("Successfully Played on Spotify", ToastUtils.Kind.SUCCESS, {
               duration: 5000,
             });
@@ -130,8 +122,7 @@ export const play = (
       icon={() => <Icons.play width="16" height="16" />}
       action={async () => {
         try {
-          for (const [, type, id] of SpotifyLinks)
-            await Utils.play(type, id, SpotifyAccount.accessToken);
+          for (const [, type, id] of SpotifyLinks) await Utils.play(type, id);
           ToastUtils.toast("Successfully Played on Spotify", ToastUtils.Kind.SUCCESS, {
             duration: 5000,
           });
@@ -151,7 +142,7 @@ export const play = (
             icon={() => <Icons.play width="16" height="16" />}
             action={async () => {
               try {
-                await Utils.play(type, id, SpotifyAccount.accessToken);
+                await Utils.play(type, id);
                 ToastUtils.toast("Successfully Played on Spotify", ToastUtils.Kind.SUCCESS, {
                   duration: 5000,
                 });

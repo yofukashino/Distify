@@ -38,7 +38,49 @@ export namespace Types {
     isJoining: DefaultTypes.AnyFunction;
     isSuggestedAccountType: DefaultTypes.AnyFunction;
   }
-
+  export interface SpotifyStore extends Store {
+    canPlay: DefaultTypes.AnyFunction;
+    getActiveSocketAndDevice: () => { socket: SpotifySocket; device: SpotifyDevice };
+    getActivity: DefaultTypes.AnyFunction;
+    getLastPlayedTrackId: DefaultTypes.AnyFunction;
+    getPlayableComputerDevices: () => Array<{ socket: SpotifySocket; device: SpotifyDevice }>;
+    getPlayerState: DefaultTypes.AnyFunction;
+    getSyncingWith: DefaultTypes.AnyFunction;
+    getTrack: DefaultTypes.AnyFunction;
+    hasConnectedAccount: DefaultTypes.AnyFunction;
+    initialize: DefaultTypes.AnyFunction;
+    shouldShowActivity: DefaultTypes.AnyFunction;
+    wasAutoPaused: DefaultTypes.AnyFunction;
+  }
+  export interface SpotifySocket {
+    accessToken: string;
+    accountId: string;
+    connectionId: string;
+    handleDeviceStateChange: DefaultTypes.AnyFunction;
+    isPremium: boolean;
+    pingInterval: { _ref: number };
+    socket: WebSocket;
+    _requestedConnect: boolean;
+    _requestedDisconnect: boolean;
+    connect: DefaultTypes.AnyFunction;
+    connected: boolean;
+    disconnect: DefaultTypes.AnyFunction;
+    handleClose: DefaultTypes.AnyFunction;
+    handleEvent: DefaultTypes.AnyFunction;
+    handleMessage: DefaultTypes.AnyFunction;
+    handleOpen: DefaultTypes.AnyFunction;
+    ping: DefaultTypes.AnyFunction;
+  }
+  export interface SpotifyDevice {
+    id: string;
+    is_active: boolean;
+    is_private_session: boolean;
+    is_restricted: boolean;
+    name: string;
+    supports_volume: boolean;
+    type: string;
+    volume_percent: number;
+  }
   export interface ElementParser {
     ReactMarkdown: DefaultTypes.AnyFunction;
     anyScopeRegex: DefaultTypes.AnyFunction;

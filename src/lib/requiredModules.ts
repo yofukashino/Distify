@@ -5,3 +5,5 @@ export const ConnectedAccountsStore =
   webpack.getByStoreName<Types.ConnectedAccountsStore>("ConnectedAccountsStore");
 
 export const ElementParser = webpack.getByProps<Types.ElementParser>("sanitizeUrl", "sanitizeText");
+
+export const SpotifyStore = webpack.getByStoreName<Types.SpotifyStore>("SpotifyStore");
