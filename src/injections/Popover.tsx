@@ -1,10 +1,11 @@
 import { toast as ToastUtils } from "replugged/common";
 import { PluginInjectorUtils, PluginLogger } from "../index";
-import { ConnectedAccountsStore } from "../lib/requiredModules";
+import Modules from "../lib/requiredModules";
 import Utils from "../lib/utils";
 import Icons from "../Components/Icons";
 import Types from "../types";
 export default (): void => {
+  const { ConnectedAccountsStore } = Modules;
   PluginInjectorUtils.addPopoverButton((message: Types.Message) => {
     const SpotifyLinks = Array.from(
       message.content.matchAll(/open.spotify.com\/(album|track|playlist)\/([^?]+)/g) as string[][] &

@@ -1,9 +1,10 @@
 import { types } from "replugged";
-import util from "replugged/util";
-import GeneralDiscordTypes from "discord-types/general";
 import { ChannelMessages as ChannelMessagesType } from "replugged/dist/renderer/modules/common/messages";
 import { ContextMenuProps } from "replugged/dist/renderer/modules/components/ContextMenu";
 import { Store } from "replugged/dist/renderer/modules/common/flux";
+import util from "replugged/util";
+import GeneralDiscordTypes from "discord-types/general";
+
 export namespace Types {
   export import DefaultTypes = types;
   export type Guild = GeneralDiscordTypes.Guild;
@@ -109,6 +110,12 @@ export namespace Types {
     sanitizeText: DefaultTypes.AnyFunction;
     sanitizeUrl: DefaultTypes.AnyFunction;
     unescapeUrl: DefaultTypes.AnyFunction;
+  }
+  export interface Modules {
+    loadModules?: () => Promise<void>;
+    ConnectedAccountsStore?: ConnectedAccountsStore;
+    ElementParser?: ElementParser;
+    SpotifyStore?: SpotifyStore;
   }
 }
 export default Types;

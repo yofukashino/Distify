@@ -2,7 +2,7 @@ import { contextMenu as ContextMenuUtils, React } from "replugged/common";
 import { ContextMenu } from "replugged/components";
 import { PluginLogger } from "../index";
 import { BASE_URL, BASE_URL_PLAYER } from "./consts";
-import { ConnectedAccountsStore, SpotifyStore } from "./requiredModules";
+import Modules from "./requiredModules";
 import MenuItems from "../Components/MenuItems";
 import Types from "../types";
 export const customCacheSpotifyMeta = new Map<string, string[]>();
@@ -10,6 +10,7 @@ export const ensureSpotifyPlayer = (): Promise<{
   socket?: Types.SpotifySocket;
   device?: Types.SpotifyDevice;
 }> => {
+  const { SpotifyStore } = Modules;
   const activePlayer = SpotifyStore.getActiveSocketAndDevice();
   if (activePlayer) return Promise.resolve(activePlayer);
   const playableDevices = SpotifyStore.getPlayableComputerDevices();
@@ -58,8 +59,7 @@ export const error = async (res): Promise<Error> => {
 export const play = async (type: string, id: string): Promise<void> => {
   const { socket, device } = await ensureSpotifyPlayer();
   if (!socket?.accessToken) {
-    PluginLogger.error("Please link your Spotify to Discord in Settings > Connections");
-    return;
+    throw new Error("Please link your Spotify to Discord in Settings > Connections");
   }
 
   const SpotifyResponse = await fetch(`${BASE_URL_PLAYER}/play?device_id=${device.id}`, {
@@ -83,8 +83,7 @@ export const play = async (type: string, id: string): Promise<void> => {
 export const queue = async (type: string, id: string): Promise<void> => {
   const { socket, device } = await ensureSpotifyPlayer();
   if (!socket?.accessToken) {
-    PluginLogger.error("Please link your Spotify to Discord in Settings > Connections");
-    return;
+    throw new Error("Please link your Spotify to Discord in Settings > Connections");
   }
   const SpotifyResponse = await fetch(
     `${BASE_URL_PLAYER}/queue?uri=${encodeURIComponent(`spotify:${type}:${id}`)}&device_id=${
@@ -104,7 +103,7 @@ export const queue = async (type: string, id: string): Promise<void> => {
   throw await error(SpotifyResponse);
 };
 
-export const mapMenuItems = (
+export const mapMenuItems = <R extends React.ReactElement[] | string[][]>(
   SpotifyLinks: string[][],
   SpotifyAccounts: Types.SpotifyAccounts[],
   type:
@@ -114,7 +113,7 @@ export const mapMenuItems = (
         queue: boolean;
         play: boolean;
       },
-): React.ReactElement[] | string[][] => {
+): R => {
   const [SpotifyMeta, setSpotifyMeta] = React.useState(
     SpotifyLinks.map(([_, type, id]) => {
       if (customCacheSpotifyMeta.has(id)) {
@@ -161,18 +160,18 @@ export const mapMenuItems = (
   }, []);
   try {
     if (SpotifyAccounts.length <= 0) {
-      return [MenuItems.noAccounts()];
+      return [MenuItems.noAccounts()] as R;
     }
 
     if ((type as { data: boolean }).data) {
-      return SpotifyMeta;
+      return SpotifyMeta as R;
     }
     return [
       type.play && MenuItems.play(SpotifyMeta),
-      type.queue && MenuItems.addToQueue(SpotifyMeta),
-    ];
+      type.queue && MenuItems.queue(SpotifyMeta),
+    ] as R;
   } catch {
-    return [];
+    return [] as R;
   }
 };
 
@@ -187,41 +186,14 @@ export const openContextMenu = (
 ): void => {
   event.currentTarget = document.querySelector(`#distify-${type.play ? "play" : "queue"}`);
   const MyContextMenu = (props) => {
-    const MappedItems = mapMenuItems(SpotifyLinks, SpotifyAccounts, type);
+    const MappedItems = mapMenuItems<React.ReactElement[]>(SpotifyLinks, SpotifyAccounts, type);
     return (
-      <ContextMenu.ContextMenu {...props} navId={"tharki-distify"}>
-        {...MappedItems as React.ReactElement[]}
+      <ContextMenu.ContextMenu {...props} navId={"yofukashino-distify"}>
+        {...MappedItems}
       </ContextMenu.ContextMenu>
     );
   };
   ContextMenuUtils.open(event, (e) => <MyContextMenu {...e} onClose={ContextMenuUtils.close} />);
 };
 
-export const manipulateMenu = (
-  message: Types.Message,
-  menu: { children: React.ReactElement[] },
-): React.ReactElement | void => {
-  const MenuGroup = menu?.children?.find?.((c) => c?.props?.id === "distify") ?? (
-    <ContextMenu.MenuGroup />
-  );
-  MenuGroup.props.id = "distify";
-  if (!menu?.children?.some?.((c) => c?.props?.id === "distify"))
-    menu?.children.splice(-1, 0, MenuGroup);
-  const SpotifyLinks = Array.from(
-    message.content.matchAll(/open.spotify.com\/(album|track|playlist)\/([^?]+)/g) as string[][] &
-      IterableIterator<RegExpMatchArray>,
-  );
-  const SpotifyAccounts = ConnectedAccountsStore.getAccounts().filter((a) => a.type === "spotify");
-  if (!SpotifyAccounts.length) {
-    MenuGroup.props.children = [MenuItems.noAccounts()];
-  }
-  const SpotifyMeta = mapMenuItems(SpotifyLinks, SpotifyAccounts, {
-    data: true,
-  }) as string[][];
-  if (SpotifyLinks.length <= 0) return;
-  if (SpotifyMeta) {
-    MenuGroup.props.children = [MenuItems.play(SpotifyMeta), MenuItems.addToQueue(SpotifyMeta)];
-  }
-};
-
-export default { error, play, queue, mapMenuItems, openContextMenu, manipulateMenu };
+export default { error, play, queue, mapMenuItems, openContextMenu };

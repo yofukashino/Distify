@@ -16,7 +16,7 @@ export const noAccounts = (): React.ReactElement => {
   );
 };
 
-export const addToQueue = (SpotifyLinks: string[][]): React.ReactElement => {
+export const queue = (SpotifyLinks: string[][]): React.ReactElement => {
   if (SpotifyLinks.length === 1) {
     const [, type, id, name] = SpotifyLinks[0];
     return (
@@ -160,4 +160,4 @@ export const play = (SpotifyLinks: string[][]): React.ReactElement => {
   );
 };
 
-export default { noAccounts, addToQueue, play };
+export default { noAccounts, queue, play };
