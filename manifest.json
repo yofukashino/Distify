@@ -9,8 +9,8 @@
   },
   "version": "1.0.5",
   "updater": {
-    "type": "store",
-    "id": "dev.yofukashino.Distify"
+    "type": "github",
+    "id": "YofukashiNo/Distify"
   },
   "license": "MIT",
   "type": "replugged-plugin",

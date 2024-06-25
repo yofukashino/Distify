@@ -53,6 +53,24 @@ export namespace Types {
     shouldShowActivity: DefaultTypes.AnyFunction;
     wasAutoPaused: DefaultTypes.AnyFunction;
   }
+  export interface ConnectedAccountsUtils {
+    authorize: DefaultTypes.AnyFunction;
+    callback: DefaultTypes.AnyFunction;
+    completeTwoWayLink: DefaultTypes.AnyFunction;
+    connect: DefaultTypes.AnyFunction;
+    disconnect: DefaultTypes.AnyFunction;
+    fetch: DefaultTypes.AnyFunction;
+    joinServer: DefaultTypes.AnyFunction;
+    linkDispatchAuthCallback: DefaultTypes.AnyFunction;
+    refresh: DefaultTypes.AnyFunction;
+    refreshAccessToken: DefaultTypes.AnyFunction;
+    setFriendSync: DefaultTypes.AnyFunction;
+    setMetadataVisibility: DefaultTypes.AnyFunction;
+    setShowActivity: DefaultTypes.AnyFunction;
+    setVisibility: DefaultTypes.AnyFunction;
+    submitPinCode: DefaultTypes.AnyFunction;
+    update: DefaultTypes.AnyFunction;
+  }
   export interface SpotifySocket {
     accessToken: string;
     accountId: string;
@@ -114,6 +132,7 @@ export namespace Types {
   export interface Modules {
     loadModules?: () => Promise<void>;
     ConnectedAccountsStore?: ConnectedAccountsStore;
+    ConnectedAccountsUtils?: ConnectedAccountsUtils;
     ElementParser?: ElementParser;
     SpotifyStore?: SpotifyStore;
   }

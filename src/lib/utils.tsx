@@ -15,23 +15,21 @@ export const ensureSpotifyPlayer = (): Promise<{
   if (activePlayer) return Promise.resolve(activePlayer);
   const playableDevices = SpotifyStore.getPlayableComputerDevices();
   if (playableDevices.length > 0) {
-    const [{ socket, device }] = playableDevices;
-    return Promise.resolve({
-      socket,
-      device,
-    });
+    const playablePlayer = playableDevices.find(
+      ({ socket, device }) => socket?.connected && device?.is_active != null,
+    );
+    return Promise.resolve(playablePlayer ?? {});
   }
   return new Promise((res) => {
     const timer = { timeout: null };
     const changeListerner = () => {
       const playableDevices = SpotifyStore.getPlayableComputerDevices();
-      const [{ socket, device }] = playableDevices;
+      const playablePlayer = playableDevices.find(
+        ({ socket, device }) => socket?.connected && device?.is_active != null,
+      );
       clearTimeout(timer?.timeout);
       SpotifyStore.removeChangeListener(changeListerner);
-      res({
-        socket,
-        device,
-      });
+      res(playablePlayer ?? {});
     };
     SpotifyStore.addChangeListener(changeListerner);
     timer.timeout = setTimeout(() => {
@@ -56,7 +54,7 @@ export const error = async (res): Promise<Error> => {
       return new Error("Unknown Error, Check the console and report the dev");
   }
 };
-export const play = async (type: string, id: string): Promise<void> => {
+export const play = async (type: string, id: string, retry?: boolean): Promise<void> => {
   const { socket, device } = await ensureSpotifyPlayer();
   if (!socket?.accessToken) {
     throw new Error("Please link your Spotify to Discord in Settings > Connections");
@@ -77,10 +75,20 @@ export const play = async (type: string, id: string): Promise<void> => {
   if (SpotifyResponse.ok) {
     return;
   }
+  if (!retry) {
+    const accecssToken = (await Modules.ConnectedAccountsUtils.refreshAccessToken(
+      "spotify",
+      socket?.accountId,
+    )) as string;
+    if (socket.accessToken !== accecssToken) socket.accessToken = accecssToken;
+    play(type, id, true);
+    return;
+  }
+
   throw await error(SpotifyResponse);
 };
 
-export const queue = async (type: string, id: string): Promise<void> => {
+export const queue = async (type: string, id: string, retry?: boolean): Promise<void> => {
   const { socket, device } = await ensureSpotifyPlayer();
   if (!socket?.accessToken) {
     throw new Error("Please link your Spotify to Discord in Settings > Connections");
@@ -98,6 +106,15 @@ export const queue = async (type: string, id: string): Promise<void> => {
     },
   );
   if (SpotifyResponse.ok) {
+    return;
+  }
+  if (!retry) {
+    const accecssToken = (await Modules.ConnectedAccountsUtils.refreshAccessToken(
+      "spotify",
+      socket?.accountId,
+    )) as string;
+    if (socket.accessToken !== accecssToken) socket.accessToken = accecssToken;
+    queue(type, id, true);
     return;
   }
   throw await error(SpotifyResponse);
