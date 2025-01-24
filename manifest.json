@@ -5,16 +5,16 @@
   "author": {
     "name": "Nanakusa",
     "discordID": "1121961711080050780",
-    "github": "YofukashiNo"
+    "github": "yofukashino"
   },
   "version": "1.0.6",
   "updater": {
     "type": "github",
-    "id": "YofukashiNo/Distify"
+    "id": "yofukashino/Distify"
   },
   "license": "MIT",
   "type": "replugged-plugin",
   "renderer": "src/index.ts",
-  "source": "https://github.com/YofukashiNo/Distify",
+  "source": "https://github.com/yofukashino/Distify",
   "image": "https://i.imgur.com/i7r0j9L.png"
 }

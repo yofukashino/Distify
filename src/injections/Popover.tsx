@@ -8,8 +8,9 @@ export default (): void => {
   const { ConnectedAccountsStore } = Modules;
   PluginInjectorUtils.addPopoverButton((message: Types.Message) => {
     const SpotifyLinks = Array.from(
-      message.content.matchAll(/open.spotify.com\/(album|track|playlist)\/([^?]+)/g) as string[][] &
-        IterableIterator<RegExpMatchArray>,
+      message.content.matchAll(
+        /open.spotify.com(?:\/intl-it)?\/(album|track|playlist)\/([^?]+)/g,
+      ) as string[][] & IterableIterator<RegExpMatchArray>,
     );
     if (SpotifyLinks.length <= 0) return null;
     const SpotifyAccounts = ConnectedAccountsStore.getAccounts().filter(
@@ -30,7 +31,10 @@ export default (): void => {
             const [play, ...queue] = SpotifyLinks;
             const [, type, id] = play;
             await Utils.play(type, id);
-            for (const [, type, id] of queue ?? []) await Utils.queue(type, id);
+            for (const [, type, id] of queue ?? []) {
+              if (type === "track") await Utils.queue(type, id);
+              else await Utils.fetchTracksAndQueue(type, id);
+            }
             ToastUtils.toast("Successfully Played on Spotify", ToastUtils.Kind.SUCCESS, {
               duration: 5000,
             });
@@ -49,8 +53,9 @@ export default (): void => {
   });
   PluginInjectorUtils.addPopoverButton((message: Types.Message) => {
     const SpotifyLinks = Array.from(
-      message.content.matchAll(/open.spotify.com\/(album|track|playlist)\/([^?]+)/g) as string[][] &
-        IterableIterator<RegExpMatchArray>,
+      message.content.matchAll(
+        /open.spotify.com(?:\/intl-it)?\/(album|track|playlist)\/([^?]+)/g,
+      ) as string[][] & IterableIterator<RegExpMatchArray>,
     );
     if (SpotifyLinks.length <= 0) return null;
     const SpotifyAccounts = ConnectedAccountsStore.getAccounts().filter(
@@ -68,7 +73,10 @@ export default (): void => {
           });
         } else {
           try {
-            for (const [, type, id] of SpotifyLinks) await Utils.queue(type, id);
+            for (const [, type, id] of SpotifyLinks) {
+              if (type === "track") await Utils.queue(type, id);
+              else await Utils.fetchTracksAndQueue(type, id);
+            }
             ToastUtils.toast("Successfully Queued on Spotify", ToastUtils.Kind.SUCCESS, {
               duration: 5000,
             });

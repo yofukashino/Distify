@@ -28,7 +28,8 @@ export const queue = (SpotifyLinks: string[][]): React.ReactElement => {
         icon={() => <Icons.queue width="16" height="16" />}
         action={async () => {
           try {
-            await Utils.queue(type, id);
+            if (type === "track") await Utils.queue(type, id);
+            else await Utils.fetchTracksAndQueue(type, id);
             ToastUtils.toast("Successfully Queued on Spotify", ToastUtils.Kind.SUCCESS, {
               duration: 5000,
             });
@@ -50,7 +51,10 @@ export const queue = (SpotifyLinks: string[][]): React.ReactElement => {
       icon={() => <Icons.queue width="16" height="16" />}
       action={async () => {
         try {
-          for (const [, type, id] of SpotifyLinks) await Utils.queue(type, id);
+          for (const [, type, id] of SpotifyLinks) {
+            if (type === "track") await Utils.queue(type, id);
+            else await Utils.fetchTracksAndQueue(type, id);
+          }
           ToastUtils.toast("Successfully Queued on Spotify", ToastUtils.Kind.SUCCESS, {
             duration: 5000,
           });

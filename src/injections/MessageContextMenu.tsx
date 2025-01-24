@@ -17,7 +17,7 @@ export default (): void => {
         menu?.children.splice(-1, 0, MenuGroup);
       const SpotifyLinks = Array.from(
         message.content.matchAll(
-          /open.spotify.com\/(album|track|playlist)\/([^?]+)/g,
+          /open.spotify.com(?:\/intl-it)?\/(album|track|playlist)\/([^?]+)/g,
         ) as IterableIterator<string[]>,
       );
       const SpotifyAccounts = Modules.ConnectedAccountsStore?.getAccounts().filter(

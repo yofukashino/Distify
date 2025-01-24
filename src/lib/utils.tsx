@@ -1,10 +1,11 @@
 import { contextMenu as ContextMenuUtils, React } from "replugged/common";
 import { ContextMenu } from "replugged/components";
 import { PluginLogger } from "../index";
-import { BASE_URL, BASE_URL_PLAYER } from "./consts";
+import { BASE_URL, BASE_URL_CLIENT, BASE_URL_PLAYER } from "./consts";
 import Modules from "./requiredModules";
 import MenuItems from "../Components/MenuItems";
 import Types from "../types";
+import { util } from "replugged";
 export const customCacheSpotifyMeta = new Map<string, string[]>();
 export const ensureSpotifyPlayer = (): Promise<{
   socket?: Types.SpotifySocket;
@@ -90,6 +91,7 @@ export const play = async (type: string, id: string, retry?: boolean): Promise<v
 
 export const queue = async (type: string, id: string, retry?: boolean): Promise<void> => {
   const { socket, device } = await ensureSpotifyPlayer();
+
   if (!socket?.accessToken) {
     throw new Error("Please link your Spotify to Discord in Settings > Connections");
   }
@@ -115,6 +117,43 @@ export const queue = async (type: string, id: string, retry?: boolean): Promise<
     )) as string;
     if (socket.accessToken !== accecssToken) socket.accessToken = accecssToken;
     queue(type, id, true);
+    return;
+  }
+  throw await error(SpotifyResponse);
+};
+
+export const fetchTracksAndQueue = async (
+  type: string,
+  id: string,
+  retry?: boolean,
+): Promise<void> => {
+  const { socket, device } = await ensureSpotifyPlayer();
+
+  if (!socket?.accessToken) {
+    throw new Error("Please link your Spotify to Discord in Settings > Connections");
+  }
+  const SpotifyResponse = await fetch(`${BASE_URL}/${type}s/${id}/tracks`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${socket?.accessToken}`,
+    },
+  });
+  if (SpotifyResponse.ok) {
+    const { items } = await SpotifyResponse.json();
+    for (const { track, type, id } of items) {
+      await queue(track?.type ?? type, track?.id ?? id);
+      await util.sleep(250);
+    }
+    return;
+  }
+
+  if (!retry) {
+    const accecssToken = (await Modules.ConnectedAccountsUtils.refreshAccessToken(
+      "spotify",
+      socket?.accountId,
+    )) as string;
+    if (socket.accessToken !== accecssToken) socket.accessToken = accecssToken;
+    fetchTracksAndQueue(type, id, true);
     return;
   }
   throw await error(SpotifyResponse);
@@ -213,4 +252,4 @@ export const openContextMenu = (
   ContextMenuUtils.open(event, (e) => <MyContextMenu {...e} onClose={ContextMenuUtils.close} />);
 };
 
-export default { error, play, queue, mapMenuItems, openContextMenu };
+export default { error, play, queue, fetchTracksAndQueue, mapMenuItems, openContextMenu };
